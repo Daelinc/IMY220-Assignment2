@@ -50,6 +50,7 @@
 				$query = "SELECT * FROM tbusers WHERE email = '$email' AND password = '$pass'";
 				$res = $mysqli->query($query);
 				if($row = mysqli_fetch_array($res)){
+					$user_id = $row["user_id"];	
 					echo 	"<table class='table table-bordered mt-3'>
 								<tr>
 									<td>Name</td>
@@ -73,10 +74,23 @@
 								<div class='form-group'>
 									<input type='hidden' name='loginEmail' value='" . $email . "' />
 									<input type='hidden' name='loginPass' value='" . $pass . "' />
-									<input type='file' class='form-control' name='picToUpload' id='picToUpload' accept='.jpg, .jpeg,' /><br/>
+									<input type='file' class='form-control' name='picToUpload' id='picToUpload' accept='.jpg, .jpeg' /><br/>
 									<input type='submit' class='btn btn-standard' value='Upload Image' name='submit' />
 								</div>
 						  	</form>";
+					
+					$query = "SELECT * FROM tbgallery WHERE user_id = '$user_id'";
+					$res = $mysqli->query($query);
+					echo 	"<h1>Image Gallery</h1>
+							<div class='row imageGallery'>";
+					
+					while($row = mysqli_fetch_array($res)){
+						$image = $row["filename"];
+						$link = "gallery/" . $image;
+						echo	"<div class='col-3' style='background-image: url($link)'></div>";
+					}
+					
+					echo	"</div>";
 				}
 				else{
 					echo 	'<div class="alert alert-danger mt-3" role="alert">
